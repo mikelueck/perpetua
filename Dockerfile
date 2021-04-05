@@ -2,7 +2,8 @@ FROM python:3.9-slim-buster
 
 RUN apt-get update && apt-get -y --no-install-recommends install \
         python3 python3-dev python3-pip gunicorn && \
-    pip3 install flask ipython bcrypt gunicorn[gthread]
+    pip3 install flask ipython bcrypt \
+        prometheus-flask-exporter google-cloud-logging gunicorn[gthread]
 
 COPY . /app
 WORKDIR  /app

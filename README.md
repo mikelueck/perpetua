@@ -19,12 +19,17 @@ server.
 
 What scripts and configuration files are required to deploy this?
 
+* [ML]Push to Container Registry (Make)
+
+
 We are looking specifically for details to deploy the container
 to a server.  These may be in the form of shell scripts or cloud
 automation tooling like Ansible/Terraform/Helm/Nomad/Docker.
 
 Discuss how to scale this application, if possible - how horizontal
 scaling can be handled automatically.
+
+* [ML] Setup a loadbalancer in front of the instances so they can be horizontally scaled as required without needing network configuration changes
 
 This exercise should take no more than ~3 hours.
 
@@ -39,20 +44,38 @@ Discuss any considerations that should be made for:
           of in the case that we use a shared postgresql backend
           compared to a distributed k/v store when the container
           workload is being scaled?
+* [ML] K/V store will not have primary key type semantics so you will have to make sure the keys are unique or you will run into collisions
+* [ML] K/V store will be memory bound (I guess depends on implementation) and may have crashes while postgres will persist values between runs
+* [ML] Postgres is likely slower and may have primary key problems requiring retries.
+* [ML] Any sensitive data should be encrypted at rest so that attack vectors are mitigated.
+
     * what metrics are useful to collect
+* [ML] for symplicity I used flask -> prometheus exporter but this is probably not the most robust way as it will require operation overhead of running Prometheus data
+
+* [ML] Queries per second (per end point, status)
+* [ML] CPU (given CPU bound)
+* [ML] IP labeled metrics (looking for abuse from single attacker)
+
     * how should metrics gathering be deployed?
+* [ML] Pushed from the server to metrics collection jobs (usually this is done with an agent) (Something like OpenTelementry is usually good, GCE/GKE will natively export System metrics (CPU etc) (Used Flask -> Prometheus in the code)
+* [ML] sometimes logs are used for this case, but logs are too bulky and have high latency when they need to be converted into metrics.
+
 
 ## Things we are looking for in your solution:
 
 * Metrics - with a focus on diagnosing performance issues and scaling
     the system horizontally.
+* [ML] Scaling horizontally would probably use latency, and CPU load to make scaling decisions
+
 * Using Industry standard tooling is a strong benefit.  We would
     prefer to not rely on entirely custom tooling to deploy to
     production and staging enviroments.
 * Manual or autoscaling the container load should have clear
     instructions.
+
 * Logging - manage the log files in some endpoint for ingestion and
     processing.
+* [ML] Setup Google Cloud Logging
 
 ## Bonus points:
 
