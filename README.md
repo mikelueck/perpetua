@@ -20,6 +20,9 @@ server.
 What scripts and configuration files are required to deploy this?
 
 * [ML]Push to Container Registry (Make)
+*[ML] Firewall rules
+gcloud compute firewall-rules create allow-http \
+ --allow tcp:80 --target-tags http-server
 
 
 We are looking specifically for details to deploy the container
