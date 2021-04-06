@@ -48,9 +48,10 @@ Discuss any considerations that should be made for:
 * [ML] K/V store will be memory bound (I guess depends on implementation) and may have crashes while postgres will persist values between runs
 * [ML] Postgres is likely slower and may have primary key problems requiring retries.
 * [ML] Any sensitive data should be encrypted at rest so that attack vectors are mitigated.
+* [ML] This app is particularily bad...it should be using HTTPS and POST rather than GET.  Many web servers will log the GET request (never the POST payload) so you are exposing customer sensitive information the way this is written.
 
     * what metrics are useful to collect
-* [ML] for symplicity I used flask -> prometheus exporter but this is probably not the most robust way as it will require operation overhead of running Prometheus data
+* [ML] for symplicity I used flask -> prometheus exporter but this is probably not the most robust way as it will require operation overhead of running Prometheus server (which has been known to have robustness issues)
 
 * [ML] Queries per second (per end point, status)
 * [ML] CPU (given CPU bound)
@@ -72,10 +73,13 @@ Discuss any considerations that should be made for:
     production and staging enviroments.
 * Manual or autoscaling the container load should have clear
     instructions.
+* [ML] Didn't quite get there.  I got an GCE VM running with the contain from Google Container Registry GCR.  I would need to take this a step further and create an instance group with loadbalancer and all that great stuff.
+The truth is to make this really scale you would probly just drop this into Cloud Run and you'd be done :).  But that is probably not the point of the exercise.
+Using GCE or GKE would probably be my preferred option for anything that isn't completely trivial
 
 * Logging - manage the log files in some endpoint for ingestion and
     processing.
-* [ML] Setup Google Cloud Logging
+* [ML] Setup Google Cloud Logging (or splunk etc)
 
 ## Bonus points:
 

@@ -19,3 +19,7 @@ repo:
 	docker tag app:latest gcr.io/$(PROJECT_ID)/app:$(TAG)
 	docker push gcr.io/$(PROJECT_ID)/app:$(TAG)
 
+gce-ig:
+	gcloud compute instance-templates create template-qa \
+    --region us-central1 \
+    --subnet subnet-us-qa
